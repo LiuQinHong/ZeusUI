@@ -1,0 +1,1 @@
+obj-y += id3tag.o

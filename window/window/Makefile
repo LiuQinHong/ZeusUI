@@ -1,0 +1,9 @@
+obj-y += window.o
+obj-y += camerawindow.o
+obj-y += filemanagerwindow.o
+obj-y += picwindow.o
+obj-y += settingwindow.o
+obj-y += startwindow.o
+obj-y += textwindow.o
+obj-y += musicwindow.o
+obj-y += qqwindow.o

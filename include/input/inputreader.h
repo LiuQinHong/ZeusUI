@@ -12,13 +12,14 @@ class InputReader;
 #include <inputdevice/device.h>
 
 #define TOUCHSCREEN		0x00000001
-#define NETWORKINPUT	0x00000010
-#define ADDFILE			0x00000100
-#define DELFILE			0x00001000
-#define ADDDIR			0x00010000
-#define DELDIR			0x00100000
-#define ADDDEVICE		0x01000000
-#define DELDEVICE		0x10000000
+#define NETWORKINPUT	0x00000002
+#define ADDFILE			0x00000004
+#define DELFILE			0x00000008
+#define ADDDIR			0x00000010
+#define DELDIR			0x00000020
+#define ADDDEVICE		0x00000040
+#define DELDEVICE		0x00000080
+#define KEYEVENT		0x00000100
 
 
 struct CookEvent {

@@ -10,6 +10,7 @@
 #include <view/picview.h>
 #include <view/textview.h>
 #include <view/musicview.h>
+#include <view/gameview.h>
 #include <view/unknownview.h>
 #include <dirent.h>
 #include <pic/picparser.h>
@@ -226,6 +227,15 @@ int FileManagerWindow::isTextFile(char *strFilePath)
 	
 }
 
+int FileManagerWindow::isNesGame(char *strFilePath)
+{
+	if (!strcmp(PicParser::getFilenameExt(strFilePath), ".nes")) {
+		/* NES文件 */
+		return 1;
+	}
+
+	return 0;	
+}
 
 int FileManagerWindow::isDir(char *strFilePath)
 {
@@ -319,6 +329,9 @@ int FileManagerWindow::scanDir(const std::string& dirPath)
 			}
 			else if (isMusicFile(strTmp)) {
 				view = new MusicView(MUSIC_VIEW_ICON, viewInfo);			
+			}
+			else if (isNesGame(strTmp)) {
+				view = new GameView(GAME_VIEW_ICON, viewInfo);
 			}
 			else if (isTextFile(strTmp)) {
 				view = new TextView(TEXT_VIEW_ICON, viewInfo);			

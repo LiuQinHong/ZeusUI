@@ -7,6 +7,8 @@
 #include <view/gameview.h>
 #include <view/musicmanagerview.h>
 #include <view/qqview.h>
+#include <view/gameboxview.h>
+
 #include <string.h>
 
 StartWindow::StartWindow()
@@ -58,7 +60,7 @@ StartWindow::StartWindow()
 	viewInfo.iWidth = windowInfo.iHeight;
 	viewInfo.iHeight = windowInfo.iHeight;
 	viewInfo.iCareEventType = TOUCHSCREEN;
-	view = new GameView(GAME_VIEW_ICON, viewInfo);
+	view = new GameBoxView(GAMEBOX_VIEW_ICON, viewInfo);
 	view->setParentWindow(this);
 	view->showViewToWindow();
 	addView(view);	

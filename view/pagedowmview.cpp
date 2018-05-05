@@ -6,6 +6,7 @@
 #include <view/dirview.h>
 #include <view/picview.h>
 #include <view/textview.h>
+#include <view/gameview.h>
 #include <view/unknownview.h>
 
 PageDowmView::PageDowmView(std::string iconPathName, ViewInfo& viewInfo)
@@ -116,9 +117,12 @@ int PageDowmView::process(struct CookEvent& cookEvent)
 			if (pfileManagerWindow->isPicFile(strTmp)) {
 				view = new PicView(PIC_VIEW_ICON, viewInfo);			
 			}
+			else if (pfileManagerWindow->isNesGame(strTmp)) {
+				view = new GameView(GAME_VIEW_ICON, viewInfo);			
+			}
 			else if (pfileManagerWindow->isTextFile(strTmp)) {
 				view = new TextView(TEXT_VIEW_ICON, viewInfo);			
-			}
+			}			
 			else {
 				/* 未知文件 */
 				view = new UnknownView(UNKNOWN_VIEW_ICON, viewInfo);

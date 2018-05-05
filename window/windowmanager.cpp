@@ -313,7 +313,6 @@ int WindowManager::onProcess(struct CookEvent *cookEvent, int iSize)
 			case ADDDIR : 
 			case DELDIR : 				
 			{
-				printf("add or del file name = %s\n", cookEvent[i].filePath.c_str());
 				return dispatchFileEvent(cookEvent[i]);
 				break;				
 			}
@@ -321,8 +320,12 @@ int WindowManager::onProcess(struct CookEvent *cookEvent, int iSize)
 			case ADDDEVICE : 				
 			case DELDEVICE : 
 			{
-				printf("add or del device name = %s\n", cookEvent[i].filePath.c_str());
 				return dispatchDeviceEvent(cookEvent[i]);
+				break;
+			}
+			case KEYEVENT :
+			{
+				//printf("key code = %d\n", cookEvent[i].iKey);
 				break;
 			}
 			default:

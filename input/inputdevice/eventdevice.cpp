@@ -12,30 +12,27 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-
-static int g_iLastX;
-static int g_iLastY;
-static int g_iLastPressure;
-
 static void CookTouchEvent(struct input_event& iev, struct CookEvent* cookEvent)
 {
 	Calibrate *calibrate = Calibrate::getCalibrate();
 	struct CalibrateInfo& calibrateInfo = calibrate->getCalibrateInfo();
+
+	cookEvent->iType = TOUCHSCREEN;
 	switch (iev.code) {
 		case ABS_X:
 		{		
 			if (calibrate->isCalibrated()) {
 				if (calibrateInfo.mInterchangeXY) {
 					/* 应该互换X Y 所以这里把本来赋给X的值赋给Y*/
-					g_iLastY = ((iev.value - calibrateInfo.iYLc) / calibrateInfo.iKy) + calibrateInfo.iYc;
+					cookEvent->iY = ((iev.value - calibrateInfo.iYLc) / calibrateInfo.iKy) + calibrateInfo.iYc;
 				}
 				else {
-					g_iLastX = ((iev.value - calibrateInfo.iXLc) / calibrateInfo.iKx) + calibrateInfo.iXc;
+					cookEvent->iX = ((iev.value - calibrateInfo.iXLc) / calibrateInfo.iKx) + calibrateInfo.iXc;
 				}				
 			}
 			else {
 				/* 没有校准的话就返回原值 */
-				g_iLastX = iev.value;
+				cookEvent->iX = iev.value;
 			}
 			break;
 		}
@@ -45,31 +42,24 @@ static void CookTouchEvent(struct input_event& iev, struct CookEvent* cookEvent)
 			if (calibrate->isCalibrated()) {
 				if (calibrateInfo.mInterchangeXY) {
 					/* 应该互换X Y 所以这里把本来赋给Y的值赋给X*/
-					g_iLastX = ((iev.value - calibrateInfo.iXLc) / calibrateInfo.iKx) + calibrateInfo.iXc;				
+					cookEvent->iX = ((iev.value - calibrateInfo.iXLc) / calibrateInfo.iKx) + calibrateInfo.iXc;				
 				}
 				else {
-					g_iLastY = ((iev.value - calibrateInfo.iYLc) / calibrateInfo.iKy) + calibrateInfo.iYc;
+					cookEvent->iY = ((iev.value - calibrateInfo.iYLc) / calibrateInfo.iKy) + calibrateInfo.iYc;
 				}
 			}
 			else {
 				/* 没有校准的话就返回原值 */
-				g_iLastY = iev.value;
+				cookEvent->iY = iev.value;
 			}
 			break;	
 		}
 	
 		case ABS_PRESSURE:
 		{
-			g_iLastPressure = iev.value;
+			cookEvent->iPressure = iev.value;
 			break;	
 		}
-	
-		case BTN_TOUCH:
-		{
-			//printf("itouch = %d\n", iev.value);		
-			break;			
-		}
-
 		default :
 		{
 			printf("Not About Knowing iev.code : %d\n", iev.code);
@@ -82,7 +72,14 @@ static void CookTouchEvent(struct input_event& iev, struct CookEvent* cookEvent)
 
 static void CookKeyEvent(struct input_event& iev, struct CookEvent* cookEvent)
 {
+	cookEvent->iKey  = iev.code;
 
+	if (iev.code == BTN_TOUCH) {
+		cookEvent->iType = TOUCHSCREEN;
+	}
+	else {
+		cookEvent->iType = KEYEVENT;		
+	}
 }
 
 
@@ -188,10 +185,6 @@ int EventDevice::process(int iFd, struct CookEvent* cookEvent, int iSize)
 				/* 同步事件 */
 				if (iev.code == SYN_REPORT) {
 					/* 单点触摸屏的事件完整 */
-					cev->iX = g_iLastX;
-					cev->iY = g_iLastY;
-					cev->iPressure = g_iLastPressure;
-					cev->iType = TOUCHSCREEN;
 					gettimeofday(&cev->tTime, NULL);
 					cev++;					
 					iRet++;

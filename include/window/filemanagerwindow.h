@@ -12,6 +12,7 @@ public:
 	FileManagerWindow(const std::string strDirPath);
 	void clearContentArea(void);	
 	void drawWindowPixelData(void);
+	int isNesGame(char *strFilePath);
 	static int isDir(char *strFilePath);
 	static int isRegFile(char *strFilePath);
 	static int isPicFile(char *strFilePath);

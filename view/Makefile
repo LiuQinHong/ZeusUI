@@ -22,3 +22,4 @@ obj-y += shareview.o
 obj-y += qqview.o
 obj-y += switchview.o
 obj-y += binaryzationview.o
+obj-y += gameboxview.o

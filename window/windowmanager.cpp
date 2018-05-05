@@ -52,9 +52,9 @@ void showFunc(void *data)
 		}
 		case CLOSE_WINDOW :
 		{
-			WindowManager::getWindowManager()->clear();
-			WindowManager::getWindowManager()->showAllWindow();	
 			delete td->window;
+			WindowManager::getWindowManager()->clear();
+			WindowManager::getWindowManager()->showAllWindow();
 			break;
 		}
 		case MOVE_WINDOW :
@@ -92,7 +92,7 @@ void WindowManager::addTask(Window *window, enum TaskType taskType)
 void WindowManager::addWindow(Window *pWindow)
 {
 	/* 设置一个最大level值 */
-	pWindow->setLevel(0xFFFF);
+	pWindow->setLevel(~0);
 	windowList.push_back(pWindow);
 	sortWindow();
 }
@@ -158,7 +158,7 @@ int WindowManager::dispatchTouchEvent(struct CookEvent& cookEvent)
 				windowTmp->setFirstEvent(cookEvent);
 				windowTmp->onProcess(cookEvent);
 
-				if (windowTmp->getWindowInfo().iLevel == windowList.size()) {
+				if (isTopWindow(windowTmp)) {
 					/* 原来就是最顶端 */
 				}
 				else {
@@ -281,6 +281,10 @@ void WindowManager::updatePoint(void)
 }
 
 
+bool WindowManager::isTopWindow(Window *window)
+{
+	return (window->getWindowInfo().iLevel == windowList.size());
+}
 
 
 int WindowManager::onProcess(struct CookEvent *cookEvent, int iSize)

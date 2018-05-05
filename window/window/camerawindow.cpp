@@ -21,6 +21,9 @@ CameraWindow::CameraWindow(){}
 
 CameraWindow::~CameraWindow()
 {
+	pthread_cancel(mCameraThread.tTreadID);  //调用后线程不一定退出
+	pthread_join(mCameraThread.tTreadID, NULL); //调用这个函数等待线程退出
+
 	stopCameraDevice();
 	exitCameraDevice();
 }
@@ -140,9 +143,13 @@ static void *CameraThreadFunction(void *pVoid)
 
 		FrameBuffer::getFrameBuffer()->FbVideoMemFusion(iTopLeftX, iTopLeftY, \
 			window->getWindowInfo().tWindowCurPixelDatas, ptVideoBufCur->tPixelDatas);
-		
-		WindowManager::getWindowManager()->addTask(window, REFRESH_WINDOW);
 
+		if (WindowManager::getWindowManager()->isTopWindow(window)) {
+			WindowManager::getWindowManager()->addTask(window, REFRESH_WINDOW);
+		}
+		else {
+			WindowManager::getWindowManager()->addTask(window, MOVE_WINDOW);
+		}
 			
 		iRet = window->putFrame(tVideoBuf);
 		if (iRet) {

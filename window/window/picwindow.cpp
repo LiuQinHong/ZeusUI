@@ -182,7 +182,7 @@ int PicWindow::showPic(void)
 		picParser = new PngParser();		
 
 	}
-	else if (!strcmp(PicParser::getFilenameExt(strPicFileName), ".bmp")) {		
+	else if (!strcmp(PicParser::getFilenameExt(strPicFileName), ".bmp")) {	
 		picParser = new BmpParser();
 	}
 

@@ -52,6 +52,7 @@ public:
 	void showWindowManager(void);
 	struct tPoint& getNextPoint(void);
 	void updatePoint(void);
+	bool isTopWindow(Window *window);
 	int onProcess(struct CookEvent *cookEvent, int iSize);	
 	static WindowManager* getWindowManager(void);
 private:
